@@ -50,6 +50,18 @@ class PrometheusAnomalyStream(
       .stream(consumerSettings)
       .evalTap(_.subscribeTo(streamConfig.topic))
       .flatMap(_.stream)
+      .through(processRecords)
+
+  /**
+   * The processing pipeline applied to records once they have been consumed from Kafka.
+   * Kept separate from the Kafka source so it can be exercised without a broker
+   * @param records stream of Kafka records
+   * @return
+   */
+  private[stream] def processRecords(
+    records: Stream[IO, CommittableConsumerRecord[IO, String, String]]
+  ): Stream[IO, Unit] =
+    records
       .mapAsync(streamConfig.streamParallelismMax)(processKafkaRecord)
       .unNone
       .mapAsync(streamConfig.streamParallelismMax)(createAnomaly)
