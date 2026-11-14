@@ -1,0 +1,5 @@
+{"serviceName": "frontend","dependencies": [{"serviceName": "cartservice","scaleFactor": 1}], "maxReplicas":  10, "minReplicas": 1}
+this line is not json
+{"serviceName": "missingfields"}
+
+{"serviceName": "cartservice","dependencies": [], "maxReplicas":  5, "minReplicas": 1}
